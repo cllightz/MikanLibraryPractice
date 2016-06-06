@@ -4,13 +4,15 @@
 Character::Character() {
 	x = 0;
 	y = 0;
+	v_x = 0;
+	v_y = 0;
 	width = 0;
 	height = 0;
 	id = 0;
 	priority = top;
 }
 
-Character Character::addTexture( Globals globals, const char* filename, unsigned long transparent_color ) {
+Character& Character::addTexture( Globals globals, const char* filename, unsigned long transparent_color ) {
 	MikanDraw->CreateTexture( globals.FONT_NUM++, filename, transparent_color );
 	return *this;
 }
