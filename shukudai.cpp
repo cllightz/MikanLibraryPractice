@@ -1,31 +1,70 @@
 #include <Mikan.h>
+#include "Character.h"
+#include "DrawableQueue.h"
+#include "Globals.h"
+#include "IDrawable.h"
+#include "Textbox.h"
 
-//プログラム起動時に1度だけ実行
-//システム設定などを行う
-void SystemInit( void )
-{
+namespace {
+	const int BUFFER_SIZE = 256;
+
+	Globals globals;
+
+	// 描画キュー
+	DrawableQueue dq;
+
+	// えっくちゅ
+	Character xchu;
+
+	// 座標表示
+	Textbox coordinate;
+}
+
+void SystemInit() {
 	MikanWindow->SetWindowName( "ゲームタイトル" );
 	MikanWindow->SetWindowIcon( "GAME_ICON" );
 }
 
-//MainLoop開始前に1度だけ実行
-//テクスチャの読み込みなどのゲーム開始前の準備を行う
-void UserInit( void )
-{
+void UserInit() {
+	globals = Globals();
+
+	// えっくちゅの初期化
+	xchu = Character()
+		.addTexture( globals, "xchu.png", TRC_ZERO )
+		.setPosition( 100, 200 )
+		.setPriority( player )
+		.setSize( 32, 32 )
+		.setVelocity( 1, 0 );
+
+	// テキストボックスの初期化
+	coordinate = Textbox()
+		.setFont( globals, "MS UI Gothic", 20, 0xFFFFFFFF )
+		.setPosition( 500, 10 )
+		.setPriority( prompt );
 }
 
-//1秒間に60回実行
-//0を返している間は何度でも実行される
-int MainLoop( void )
-{
-	//画面の初期化
+int MainLoop() {
+	// Escキーで終了
+	if ( MikanInput->GetKeyNum( K_ESC ) > 0 ) {
+		return 1;
+	}
+
+	// 画面のフラッシュ
 	MikanDraw->ClearScreen();
+
+	// えっくちゅの移動
+	xchu.move();
+	dq.push( &xchu );
+	// 座標表示の更新
+	char buf[BUFFER_SIZE];
+	sprintf_s( buf, "player_x: %d", xchu.getX() );
+	coordinate.setText( buf );
+	dq.push( &coordinate );
+
+	// 描画
+	dq.draw();
 
 	return 0;
 }
 
-//MainLoop終了後に1度だけ実行
-//後片付けなどを行う
-void CleanUp( void )
-{
-}
+void CleanUp() {}
