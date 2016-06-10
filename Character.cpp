@@ -1,5 +1,6 @@
 #include <Mikan.h>
 #include "Character.h"
+#include "Globals.h"
 
 Character::Character() {
 	x = 0;
@@ -12,8 +13,8 @@ Character::Character() {
 	priority = top;
 }
 
-Character& Character::addTexture( Globals globals, const char* filename, unsigned long transparent_color ) {
-	MikanDraw->CreateTexture( globals.FONT_NUM++, filename, transparent_color );
+Character& Character::addTexture( const char* filename, unsigned long transparent_color ) {
+	MikanDraw->CreateTexture( Globals::getInstance().generateNewTextureId(), filename, transparent_color );
 	return *this;
 }
 

@@ -1,6 +1,18 @@
-#include "Globals.h"
+#include "Globals.h"6
 
-Globals::Globals() {
-	TEXTURE_NUM = 0;
-	FONT_NUM = 0;
+void Globals::initialize() {
+	textureNum = 0;
+	fontNum = 0;
+}
+
+unsigned Globals::generateNewTextureId() {
+	unsigned res = textureNum;
+	textureNum++;
+	return res;
+}
+
+unsigned Globals::generateNewFontId() {
+	unsigned res = fontNum;
+	textureNum++;
+	return res;
 }

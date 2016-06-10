@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include <Mikan.h>
+#include "Globals.h"
 
 Bullet::Bullet() {
 	x = 0;
@@ -14,8 +15,8 @@ Bullet::Bullet() {
 	priority = top;
 }
 
-Bullet& Bullet::addTexture( Globals& globals, const char* filename, unsigned long transparent_color ) {
-	MikanDraw->CreateTexture( globals.FONT_NUM++, filename, transparent_color );
+Bullet& Bullet::addTexture( const char* filename, unsigned long transparent_color ) {
+	MikanDraw->CreateTexture( Globals::getInstance().generateNewTextureId(), filename, transparent_color );
 	return *this;
 }
 

@@ -1,5 +1,6 @@
 #include "Textbox.h"
 #include <Mikan.h>
+#include "Globals.h"
 
 Textbox::Textbox() {
 	x = 0;
@@ -16,8 +17,8 @@ DrawablePriority Textbox::getPriority() {
 	return priority;
 }
 
-Textbox& Textbox::setFont( Globals globals, const char* fontname, int size, unsigned color ) {
-	MikanDraw->CreateFont( globals.FONT_NUM++, fontname, size, color );
+Textbox& Textbox::setFont( const char* fontname, int size, unsigned color ) {
+	MikanDraw->CreateFont( Globals::getInstance().generateNewFontId(), fontname, size, color );
 	return *this;
 }
 

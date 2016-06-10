@@ -1,6 +1,5 @@
 #pragma once
 #include "IDrawable.h"
-#include "Globals.h"
 
 class Bullet : public IDrawable {
 private:
@@ -21,7 +20,7 @@ private:
 public:
 	Bullet();
 
-	Bullet& addTexture( Globals&, const char*, unsigned long = 0x00000000 );
+	Bullet& addTexture( const char*, unsigned long = 0x00000000 );
 
 	void draw();
 

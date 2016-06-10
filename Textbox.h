@@ -1,5 +1,4 @@
 #pragma once
-#include "Globals.h"
 #include "IDrawable.h"
 
 class Textbox : public IDrawable {
@@ -17,7 +16,7 @@ public:
 
 	DrawablePriority getPriority();
 
-	Textbox& setFont( Globals, const char*, int, unsigned );
+	Textbox& setFont( const char*, int, unsigned );
 	Textbox& setPosition( int, int );
 	Textbox& setPriority( DrawablePriority );
 	Textbox& setText( const char* );

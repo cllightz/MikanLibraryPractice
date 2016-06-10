@@ -8,8 +8,6 @@
 namespace {
 	const int BUFFER_SIZE = 256;
 
-	Globals globals;
-
 	// 描画キュー
 	DrawableQueue dq;
 
@@ -26,11 +24,11 @@ void SystemInit() {
 }
 
 void UserInit() {
-	globals = Globals();
+	Globals::getInstance();
 
 	// えっくちゅの初期化
 	xchu = Character()
-		.addTexture( globals, "xchu.png", TRC_ZERO )
+		.addTexture( "xchu.png", TRC_ZERO )
 		.setPosition( 100, 200 )
 		.setPriority( player )
 		.setSize( 32, 32 )
@@ -38,7 +36,7 @@ void UserInit() {
 
 	// テキストボックスの初期化
 	coordinate = Textbox()
-		.setFont( globals, "MS UI Gothic", 20, 0xFFFFFFFF )
+		.setFont( "MS UI Gothic", 20, 0xFFFFFFFF )
 		.setPosition( 500, 10 )
 		.setPriority( prompt );
 }
