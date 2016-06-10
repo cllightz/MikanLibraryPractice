@@ -1,4 +1,5 @@
 #pragma once
+#include "Bullet.h"
 #include "IDrawable.h"
 
 class Character : public IDrawable {
@@ -22,8 +23,11 @@ public:
 	void draw();
 
 	DrawablePriority getPriority();
+	double getR();
 	int getX();
 	int getY();
+
+	bool isCollision( Bullet& );
 
 	Character& move();
 

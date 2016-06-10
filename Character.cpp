@@ -26,12 +26,22 @@ DrawablePriority Character::getPriority() {
 	return priority;
 }
 
+double Character::getR() {
+	return width < height ? width / 2.0 : height / 2.0;
+}
+
 int Character::getX() {
 	return x;
 }
 
 int Character::getY() {
 	return y;
+}
+
+bool Character::isCollision( Bullet& arg ) {
+	double x2 = pow( getX() - arg.getX(), 2.0 );
+	double y2 = pow( getY() - arg.getY(), 2.0 );
+	return pow( x2 + y2, 0.5 ) < getR() + arg.getR();
 }
 
 Character& Character::move() {

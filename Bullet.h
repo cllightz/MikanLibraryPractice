@@ -25,6 +25,7 @@ public:
 	void draw();
 
 	DrawablePriority getPriority();
+	double getR();
 	int getX();
 	int getY();
 

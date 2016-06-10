@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include <cmath>
 #include <Mikan.h>
 #include "Globals.h"
 
@@ -28,6 +29,10 @@ DrawablePriority Bullet::getPriority() {
 	return priority;
 }
 
+double Bullet::getR() {
+	return width < height ? width / 2.0 : height / 2.0;
+}
+
 int Bullet::getX() {
 	return x;
 }
@@ -36,7 +41,11 @@ int Bullet::getY() {
 	return y;
 }
 
-
+bool Bullet::isCollision( Bullet& arg ) {
+	double x2 = pow( getX() - arg.getX(), 2.0 );
+	double y2 = pow( getY() - arg.getY(), 2.0 );
+	return pow( x2 + y2, 0.5 ) < getR() + arg.getR();
+}
 
 Bullet& Bullet::move() {
 	x += v_x;
