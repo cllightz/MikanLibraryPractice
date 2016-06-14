@@ -46,19 +46,19 @@ bool Character::isCollision( Bullet& arg ) {
 
 Character& Character::move() {
 	if ( MikanInput->GetKeyNum( K_UP ) ) {
-		y--;
+		y -= 5;
 	}
 
 	if ( MikanInput->GetKeyNum( K_DOWN ) ) {
-		y++;
+		y += 5;
 	}
 
 	if ( MikanInput->GetKeyNum( K_LEFT ) ) {
-		x--;
+		x -= 5;
 	}
 
 	if ( MikanInput->GetKeyNum( K_RIGHT ) ) {
-		x++;
+		x += 5;
 	}
 
 	return *this;

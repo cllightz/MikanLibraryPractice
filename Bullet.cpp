@@ -68,6 +68,8 @@ bool Bullet::isDisappeared() {
 }
 
 Bullet& Bullet::move() {
+	v_x = a_x;
+	v_y = a_y;
 	x += v_x;
 	y += v_y;
 	return *this;

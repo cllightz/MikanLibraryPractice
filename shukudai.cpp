@@ -83,56 +83,56 @@ int MainLoop() {
 													.setType( BULLET_RED )
 													.setSize( 16, 16 )
 													.setPosition( MikanWindow->GetWindowWidth() / 2 - 8, -10 )
-													.setVelocity( 0, 1 )
-													.setAcceleration( 0, 0 ) );
+													.setVelocity( 0, 0 )
+													.setAcceleration( 0, 1 ) );
 
 	// 自弾の移動
 	for ( int i = 0; i < playerBullets.size(); i++ ) {
-		playerBullets[i].move();
+		playerBullets.at( i ).move();
 	}
 
 	// 敵弾の移動
 	for ( int i = 0; i < enemyBullets.size(); i++ ) {
-		enemyBullets[i].move();
+		enemyBullets.at( i ).move();
 	}
 
 	// 自弾の削除
 	for ( int i = playerBullets.size() - 1; i >= 0; i-- ) {
-		if ( playerBullets[i].isDisappeared() ) {
+		if ( playerBullets.at( i ).isDisappeared() ) {
 			playerBullets.erase( playerBullets.begin() + i );
 		}
 	}
 
 	// 敵弾の削除
 	for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
-		if ( enemyBullets[i].isDisappeared() ) {
+		if ( enemyBullets.at( i ).isDisappeared() ) {
 			enemyBullets.erase( enemyBullets.begin() + i );
 		}
 	}
 
 	// 弾の衝突
-	for each (Bullet bullet in playerBullets) {
+	for ( int i = 0; i < playerBullets.size(); i++ ) {
 		for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
-			if ( enemyBullets[i].isCollision( bullet ) ) {
+			if ( enemyBullets.at( i ).isCollision( playerBullets[i] ) ) {
 				enemyBullets.erase( enemyBullets.begin() + i );
 			}
 		}
 	}
 
 	// 描画キューに追加
-	for each ( Bullet bullet in playerBullets ) {
-		dq.push( &bullet );
+	for ( int i = 0; i < playerBullets.size(); i++ ) {
+		dq.push( &playerBullets.at( i ) );
 	}
 
-	for each ( Bullet bullet in enemyBullets ) {
-		dq.push( &bullet );
+	for ( int i = 0; i < enemyBullets.size(); i++ ) {
+		dq.push( &enemyBullets.at( i ) );
 	}
 
 	// テキストボックスの更新
 	char buf[BUFFER_SIZE] = "";
 
-	for each ( Bullet bullet in enemyBullets ) {
-		if ( xchu.isCollision( bullet ) ) {
+	for ( int i = 0; i < enemyBullets.size(); i++ ) {
+		if ( xchu.isCollision( enemyBullets.at( i ) ) ) {
 			sprintf_s( buf, "HIT" );
 			break;
 		}
