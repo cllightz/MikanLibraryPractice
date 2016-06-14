@@ -69,22 +69,27 @@ int MainLoop() {
 
 	// Ž©’e‚Ì¶¬
 	if ( MikanInput->GetKeyNum( K_Z ) ) {
-		playerBullets.push_back( Bullet()
-														 .addTexture( TEXTURE_BULLET, TRC_ZERO )
-														 .setType( BULLET_ORANGE )
-														 .setSize( 16, 16 )
-														 .setPosition( xchu.getX(), xchu.getY() )
-														 .setVelocity( 0, -10 ) );
+		Bullet newPlayerBullet = Bullet()
+			.addTexture( TEXTURE_BULLET, TRC_ZERO )
+			.setType( BULLET_ORANGE )
+			.setSize( 16, 16 )
+			.setPosition( xchu.getX(), xchu.getY() )
+			.setVelocity( 0, -10 )
+			.setAcceleration( 0, -2 );
+
+		playerBullets.push_back( newPlayerBullet );
 	}
 
 	// “G’e‚Ì¶¬
-	enemyBullets.push_back( Bullet()
-													.addTexture( TEXTURE_BULLET, TRC_ZERO )
-													.setType( BULLET_RED )
-													.setSize( 16, 16 )
-													.setPosition( MikanWindow->GetWindowWidth() / 2 - 8, -10 )
-													.setVelocity( 0, 0 )
-													.setAcceleration( 0, 1 ) );
+	Bullet newEnemyBullet = Bullet()
+		.addTexture( TEXTURE_BULLET, TRC_ZERO )
+		.setType( BULLET_RED )
+		.setSize( 16, 16 )
+		.setPosition( MikanWindow->GetWindowWidth() / 2 - 8, -10 )
+		.setVelocity( 0, 0 )
+		.setAcceleration( 0, 1 );
+
+	enemyBullets.push_back( newEnemyBullet );
 
 	// Ž©’e‚ÌˆÚ“®
 	for ( int i = 0; i < playerBullets.size(); i++ ) {
