@@ -10,11 +10,11 @@ Character::Character() {
 	width = 0;
 	height = 0;
 	id = 0;
-	priority = top;
+	priority = TOP;
 }
 
-Character& Character::addTexture( const char* filename, unsigned long transparent_color ) {
-	MikanDraw->CreateTexture( Globals::getInstance().generateNewTextureId(), filename, transparent_color );
+Character& Character::addTexture( unsigned argId, unsigned long transparent_color ) {
+	MikanDraw->CreateTexture( argId, Globals::getInstance().TEXTURES[argId], transparent_color );
 	return *this;
 }
 
@@ -45,8 +45,22 @@ bool Character::isCollision( Bullet& arg ) {
 }
 
 Character& Character::move() {
-	x += v_x;
-	y += v_y;
+	if ( MikanInput->GetKeyNum( K_UP ) ) {
+		y--;
+	}
+
+	if ( MikanInput->GetKeyNum( K_DOWN ) ) {
+		y++;
+	}
+
+	if ( MikanInput->GetKeyNum( K_LEFT ) ) {
+		x--;
+	}
+
+	if ( MikanInput->GetKeyNum( K_RIGHT ) ) {
+		x++;
+	}
+
 	return *this;
 }
 

@@ -18,7 +18,7 @@ DrawablePriority Textbox::getPriority() {
 }
 
 Textbox& Textbox::setFont( const char* fontname, int size, unsigned color ) {
-	MikanDraw->CreateFont( Globals::getInstance().generateNewFontId(), fontname, size, color );
+	MikanDraw->CreateFont( 0, fontname, size, color );
 	return *this;
 }
 

@@ -13,16 +13,16 @@ Bullet::Bullet() {
 	width = 0;
 	height = 0;
 	id = 0;
-	priority = top;
+	priority = TOP;
 }
 
-Bullet& Bullet::addTexture( const char* filename, unsigned long transparent_color ) {
-	MikanDraw->CreateTexture( Globals::getInstance().generateNewTextureId(), filename, transparent_color );
+Bullet& Bullet::addTexture( unsigned argId, unsigned long transparent_color ) {
+	MikanDraw->CreateTexture( argId, Globals::getInstance().TEXTURES[argId], transparent_color );
 	return *this;
 }
 
 void Bullet::draw() {
-	MikanDraw->DrawTexture( id, x, y, 0, 0, width, height );
+	MikanDraw->DrawTexture( id, x, y, width * (int)type, 0, width, height );
 }
 
 DrawablePriority Bullet::getPriority() {
@@ -45,6 +45,26 @@ bool Bullet::isCollision( Bullet& arg ) {
 	double x2 = pow( getX() - arg.getX(), 2.0 );
 	double y2 = pow( getY() - arg.getY(), 2.0 );
 	return pow( x2 + y2, 0.5 ) < getR() + arg.getR();
+}
+
+bool Bullet::isDisappeared() {
+	if ( y <= -MikanWindow->GetDesktopHeight() && v_y <= 0 && a_y <= 0 ) {
+		return true;
+	}
+
+	if ( y >= +MikanWindow->GetDesktopHeight() && v_y >= 0 && a_y >= 0 ) {
+		return true;
+	}
+
+	if ( x <= -MikanWindow->GetDesktopWidth() && v_x <= 0 && a_x <= 0 ) {
+		return true;
+	}
+
+	if ( x >= +MikanWindow->GetDesktopWidth() && v_x >= 0 && a_x >= 0 ) {
+		return true;
+	}
+
+	return false;
 }
 
 Bullet& Bullet::move() {
@@ -73,6 +93,11 @@ Bullet& Bullet::setPriority( DrawablePriority p ) {
 Bullet& Bullet::setSize( int w, int h ) {
 	width = w;
 	height = h;
+	return *this;
+}
+
+Bullet& Bullet::setType( BulletType argType ) {
+	type = argType;
 	return *this;
 }
 

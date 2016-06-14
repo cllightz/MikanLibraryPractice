@@ -1,4 +1,5 @@
 #include <Mikan.h>
+#include <vector>
 #include "Character.h"
 #include "DrawableQueue.h"
 #include "Globals.h"
@@ -14,8 +15,14 @@ namespace {
 	// えっくちゅ
 	Character xchu;
 
-	// 座標表示
+	// テキストボックス
 	Textbox coordinate;
+
+	// 自弾のリスト
+	std::vector<Bullet> playerBullets;
+
+	// 敵弾のリスト
+	std::vector<Bullet> enemyBullets;
 }
 
 void SystemInit() {
@@ -24,21 +31,27 @@ void SystemInit() {
 }
 
 void UserInit() {
-	Globals::getInstance();
+	Globals::getInstance().initialize();
 
 	// えっくちゅの初期化
 	xchu = Character()
-		.addTexture( "xchu.png", TRC_ZERO )
-		.setPosition( 100, 200 )
-		.setPriority( player )
+		.addTexture( TEXTURE_XCHU, TRC_ZERO )
 		.setSize( 32, 32 )
-		.setVelocity( 1, 0 );
+		.setPriority( PLAYER );
+
+	xchu.setPosition( MikanWindow->GetWindowWidth() / 2 - xchu.getR(), 3 * MikanWindow->GetWindowHeight() / 4 - xchu.getR() );
 
 	// テキストボックスの初期化
 	coordinate = Textbox()
 		.setFont( "MS UI Gothic", 20, 0xFFFFFFFF )
 		.setPosition( 500, 10 )
-		.setPriority( prompt );
+		.setPriority( PROMPT );
+
+	// 自弾のリストの初期化
+	playerBullets = std::vector<Bullet>();
+
+	// 敵弾のリストの初期化
+	enemyBullets = std::vector<Bullet>();
 }
 
 int MainLoop() {
@@ -53,9 +66,78 @@ int MainLoop() {
 	// えっくちゅの移動
 	xchu.move();
 	dq.push( &xchu );
-	// 座標表示の更新
-	char buf[BUFFER_SIZE];
-	sprintf_s( buf, "player_x: %d", xchu.getX() );
+
+	// 自弾の生成
+	if ( MikanInput->GetKeyNum( K_Z ) ) {
+		playerBullets.push_back( Bullet()
+														 .addTexture( TEXTURE_BULLET, TRC_ZERO )
+														 .setType( BULLET_ORANGE )
+														 .setSize( 16, 16 )
+														 .setPosition( xchu.getX(), xchu.getY() )
+														 .setVelocity( 0, -10 ) );
+	}
+
+	// 敵弾の生成
+	enemyBullets.push_back( Bullet()
+													.addTexture( TEXTURE_BULLET, TRC_ZERO )
+													.setType( BULLET_RED )
+													.setSize( 16, 16 )
+													.setPosition( MikanWindow->GetWindowWidth() / 2 - 8, -10 )
+													.setVelocity( 0, 1 )
+													.setAcceleration( 0, 0 ) );
+
+	// 自弾の移動
+	for ( int i = 0; i < playerBullets.size(); i++ ) {
+		playerBullets[i].move();
+	}
+
+	// 敵弾の移動
+	for ( int i = 0; i < enemyBullets.size(); i++ ) {
+		enemyBullets[i].move();
+	}
+
+	// 自弾の削除
+	for ( int i = playerBullets.size() - 1; i >= 0; i-- ) {
+		if ( playerBullets[i].isDisappeared() ) {
+			playerBullets.erase( playerBullets.begin() + i );
+		}
+	}
+
+	// 敵弾の削除
+	for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
+		if ( enemyBullets[i].isDisappeared() ) {
+			enemyBullets.erase( enemyBullets.begin() + i );
+		}
+	}
+
+	// 弾の衝突
+	for each (Bullet bullet in playerBullets) {
+		for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
+			if ( enemyBullets[i].isCollision( bullet ) ) {
+				enemyBullets.erase( enemyBullets.begin() + i );
+			}
+		}
+	}
+
+	// 描画キューに追加
+	for each ( Bullet bullet in playerBullets ) {
+		dq.push( &bullet );
+	}
+
+	for each ( Bullet bullet in enemyBullets ) {
+		dq.push( &bullet );
+	}
+
+	// テキストボックスの更新
+	char buf[BUFFER_SIZE] = "";
+
+	for each ( Bullet bullet in enemyBullets ) {
+		if ( xchu.isCollision( bullet ) ) {
+			sprintf_s( buf, "HIT" );
+			break;
+		}
+	}
+	
 	coordinate.setText( buf );
 	dq.push( &coordinate );
 

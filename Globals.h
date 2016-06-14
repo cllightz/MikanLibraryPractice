@@ -1,9 +1,12 @@
 #pragma once
 
+enum TextureId {
+	TEXTURE_XCHU,
+	TEXTURE_BULLET,
+};
+
 class Globals {
 private:
-	unsigned textureNum;
-	unsigned fontNum;
 	Globals() = default;
 	~Globals() = default;
 
@@ -20,6 +23,5 @@ public:
 
 	void initialize();
 
-	unsigned generateNewTextureId();
-	unsigned generateNewFontId();
+	const char TEXTURES[2][16] = { "xchu.png", "bullet.png" };
 };

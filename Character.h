@@ -18,7 +18,7 @@ private:
 public:
 	Character();
 
-	Character& addTexture( const char*, unsigned long = 0x00000000 );
+	Character& addTexture( unsigned, unsigned long = 0x00000000 );
 	
 	void draw();
 
