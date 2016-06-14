@@ -19,10 +19,10 @@ namespace {
 	Textbox coordinate;
 
 	// ©’e‚ÌƒŠƒXƒg
-	std::vector<Bullet> playerBullets;
+	std::vector<Bullet*> playerBullets;
 
 	// “G’e‚ÌƒŠƒXƒg
-	std::vector<Bullet> enemyBullets;
+	std::vector<Bullet*> enemyBullets;
 }
 
 void SystemInit() {
@@ -48,10 +48,10 @@ void UserInit() {
 		.setPriority( PROMPT );
 
 	// ©’e‚ÌƒŠƒXƒg‚Ì‰Šú‰»
-	playerBullets = std::vector<Bullet>();
+	playerBullets = std::vector<Bullet*>();
 
 	// “G’e‚ÌƒŠƒXƒg‚Ì‰Šú‰»
-	enemyBullets = std::vector<Bullet>();
+	enemyBullets = std::vector<Bullet*>();
 }
 
 int MainLoop() {
@@ -69,7 +69,9 @@ int MainLoop() {
 
 	// ©’e‚Ì¶¬
 	if ( MikanInput->GetKeyNum( K_Z ) ) {
-		Bullet newPlayerBullet = Bullet()
+		Bullet* newPlayerBullet = new Bullet();
+
+		(*newPlayerBullet)
 			.addTexture( TEXTURE_BULLET, TRC_ZERO )
 			.setType( BULLET_ORANGE )
 			.setSize( 16, 16 )
@@ -81,7 +83,9 @@ int MainLoop() {
 	}
 
 	// “G’e‚Ì¶¬
-	Bullet newEnemyBullet = Bullet()
+	Bullet* newEnemyBullet = new Bullet();
+
+	(*newEnemyBullet)
 		.addTexture( TEXTURE_BULLET, TRC_ZERO )
 		.setType( BULLET_RED )
 		.setSize( 16, 16 )
@@ -93,51 +97,57 @@ int MainLoop() {
 
 	// ©’e‚ÌˆÚ“®
 	for ( int i = 0; i < playerBullets.size(); i++ ) {
-		playerBullets.at( i ).move();
+		playerBullets[i]->move();
 	}
 
 	// “G’e‚ÌˆÚ“®
 	for ( int i = 0; i < enemyBullets.size(); i++ ) {
-		enemyBullets.at( i ).move();
+		enemyBullets[i]->move();
 	}
 
 	// ©’e‚Ìíœ
 	for ( int i = playerBullets.size() - 1; i >= 0; i-- ) {
-		if ( playerBullets.at( i ).isDisappeared() ) {
+		if ( playerBullets[i]->isDisappeared() ) {
+			Bullet* tmp = playerBullets[i];
 			playerBullets.erase( playerBullets.begin() + i );
+			delete tmp;
 		}
 	}
 
 	// “G’e‚Ìíœ
 	for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
-		if ( enemyBullets.at( i ).isDisappeared() ) {
+		if ( enemyBullets[i]->isDisappeared() ) {
+			Bullet* tmp = enemyBullets[i];
 			enemyBullets.erase( enemyBullets.begin() + i );
+			delete tmp;
 		}
 	}
 
 	// ’e‚ÌÕ“Ë
 	for ( int i = 0; i < playerBullets.size(); i++ ) {
 		for ( int i = enemyBullets.size() - 1; i >= 0; i-- ) {
-			if ( enemyBullets.at( i ).isCollision( playerBullets[i] ) ) {
+			if ( enemyBullets[i]->isCollision( *playerBullets[i] ) ) {
+				Bullet* tmp = enemyBullets[i];
 				enemyBullets.erase( enemyBullets.begin() + i );
+				delete tmp;
 			}
 		}
 	}
 
 	// •`‰æƒLƒ…[‚É’Ç‰Á
 	for ( int i = 0; i < playerBullets.size(); i++ ) {
-		dq.push( &playerBullets.at( i ) );
+		dq.push( playerBullets[i] );
 	}
 
 	for ( int i = 0; i < enemyBullets.size(); i++ ) {
-		dq.push( &enemyBullets.at( i ) );
+		dq.push( enemyBullets[i] );
 	}
 
 	// ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ÌXV
 	char buf[BUFFER_SIZE] = "";
 
 	for ( int i = 0; i < enemyBullets.size(); i++ ) {
-		if ( xchu.isCollision( enemyBullets.at( i ) ) ) {
+		if ( xchu.isCollision( *enemyBullets[i] ) ) {
 			sprintf_s( buf, "HIT" );
 			break;
 		}

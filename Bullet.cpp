@@ -68,10 +68,10 @@ bool Bullet::isDisappeared() {
 }
 
 Bullet& Bullet::move() {
-	v_x += a_x;
-	v_y += a_y;
-	x += v_x;
-	y += v_y;
+	this->v_x += this->a_x;
+	this->v_y += this->a_y;
+	this->x += this->v_x;
+	this->y += this->v_y;
 	return *this;
 }
 
